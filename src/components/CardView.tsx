@@ -14,7 +14,7 @@ const Box = styled.div`
   transition: all 0.3s ease-out;
 
   &:hover{
-    & p{
+    & .paragraph{
       color: #000;
       transition: all 0.2s ease;
     }

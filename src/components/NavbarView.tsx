@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -76,7 +76,7 @@ function NavbarView() {
         <LinkMenu>
           <li><Link to="/"> Home </Link></li>
           <li><Link to="/about"> About </Link></li>
-          <li><Link to="#"> Github </Link></li>
+          <li><Link to="/github" > Github </Link></li>
         </LinkMenu>
       </nav>
 

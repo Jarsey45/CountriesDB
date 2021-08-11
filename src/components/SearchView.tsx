@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { GET_COUNTRIES } from '../features/queries';
 import CardView from './CardView';
+import '../scss/loading.scss';
 
 
 const Box = styled.div`
@@ -24,7 +25,7 @@ const Container = styled.div`
 
 const Input = styled.input`
   font-family: 'Oxygen',sans-serif;
-  font-size: 25px;
+  font-size: 1.5vmax;
   color: #a1a1a1;
   background: none;
   border:1px solid #313131;
@@ -39,15 +40,21 @@ const Input = styled.input`
   
 `
 
+const Empty = styled.div`
+  font-size: 3em;
+  color:teal;
+  cursor: pointer;
+  margin: 15% 0;
+  text-align:center;
+`
+
 function SearchView() {
   const [text, setText] = useState('');
   const { loading, error, data } = useQuery(GET_COUNTRIES, {
     variables: { countryName: text }
   })
 
-  useEffect(() => {
-    console.log(data);
-  }, [data])
+
 
 
 
@@ -58,9 +65,7 @@ function SearchView() {
       <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
     </Box>
     <Container>
-
-      loading...
-
+      <div className="loader"></div>
     </Container>
   </>)
 
@@ -70,20 +75,18 @@ function SearchView() {
       <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
     </Box>
     <Container>
-
-      error
-
+      Some error occured &gt; {error.message}
     </Container>
   </>)
 
   return (
     <>
       <Box>
-        <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
+        <Input value={text} onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
       </Box>
       <Container>
 
-        {data.countries.edges ? data.countries.edges.map((country: any, index: number) => {
+        {data.countries.edges.length > 0 ? data.countries.edges.map((country: any, index: number) => {
           const { node } = country;
           return <CardView
             name={node.name}
@@ -92,7 +95,7 @@ function SearchView() {
             capital={node.capital}
             region={node.region} />;
 
-        }) : "No countries matches the query"}
+        }) : <Empty onClick={() => setText('')}> No countries matches your query, please try again. </Empty>}
 
       </Container>
     </>

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route, HashRouter } from 'react-router-dom';
+import { Switch, Route, HashRouter } from 'react-router-dom';
 import NavbarView from './components/NavbarView';
 import AboutView from './components/AboutView';
 import SearchView from './components/SearchView';
@@ -24,6 +24,8 @@ function App() {
         <Route exact path="/country/:id">
           <CountryView />
         </Route>
+
+        <Route exact path='/github' render={() => (window.location = "https://github.com/Jarsey45/CountriesDB" as unknown as Location)} />
 
         <Route path="*">
           <ErrorView />
