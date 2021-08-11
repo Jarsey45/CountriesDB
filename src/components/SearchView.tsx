@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
+import { GET_COUNTRIES } from '../features/queries';
 import CardView from './CardView';
 
 
@@ -37,57 +40,63 @@ const Input = styled.input`
 `
 
 function SearchView() {
+  const [text, setText] = useState('');
+  const { loading, error, data } = useQuery(GET_COUNTRIES, {
+    variables: { countryName: text }
+  })
+
+  useEffect(() => {
+    console.log(data);
+  }, [data])
+
+
+
+
+  //Yeah it's ugly,  welp
+  if (loading) return (<>
+    <Box>
+      <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
+    </Box>
+    <Container>
+
+      loading...
+
+    </Container>
+  </>)
+
+
+  if (error) return (<>
+    <Box>
+      <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
+    </Box>
+    <Container>
+
+      error
+
+    </Container>
+  </>)
+
   return (
     <>
       <Box>
-        <Input onChange={() => { }} placeholder="Type name of country" type="text" />
+        <Input onChange={(e) => { setText(e.target.value) }} placeholder="Type name of country" type="text" />
       </Box>
       <Container>
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
-        <CardView
-          name="Afganistan"
-          flag="https://restcountries.eu/data/afg.svg"
-          id={0}
-          capital="Kabul"
-          region="Asia" />
+
+        {data.countries.edges ? data.countries.edges.map((country: any, index: number) => {
+          const { node } = country;
+          return <CardView
+            name={node.name}
+            flag={node.flag}
+            id={node.numericCode}
+            capital={node.capital}
+            region={node.region} />;
+
+        }) : "No countries matches the query"}
+
       </Container>
     </>
   )
 }
 
-export default SearchView
+export default SearchView;

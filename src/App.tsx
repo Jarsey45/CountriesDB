@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, HashRouter } from 'react-router-dom';
 import NavbarView from './components/NavbarView';
 import AboutView from './components/AboutView';
 import SearchView from './components/SearchView';
@@ -9,7 +9,7 @@ import './App.scss';
 
 function App() {
   return (
-    <Router >
+    <HashRouter >
       <NavbarView />
       <Switch>
 
@@ -30,7 +30,7 @@ function App() {
         </Route>
 
       </Switch>
-    </Router>
+    </HashRouter>
   );
 }
 
